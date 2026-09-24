@@ -47,6 +47,8 @@
   register: "Klarinette"
 - name: Katharina Schneider
   register: "Klarinette"
+- name: Fanny Klingler
+  register: "Klarinette"
 - name: Hubert Fechter
   register: "Saxophon"
   rollen: [ausschuss]
