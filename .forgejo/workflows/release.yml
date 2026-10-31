@@ -5,14 +5,13 @@ name: Release
 # YYYY.MM.VERSION (z.B. 2026.11.1) – VERSION zählt pro Kalendermonat neu ab 1
 # hoch. Der Tag wird vom Push-Mirror nach GitHub gespiegelt.
 # Commits mit "[skip ci]" (z.B. der monatliche Heartbeat) lösen keinen Release aus.
+# Der automatische Forgejo-Token hat Schreibrechte auf das eigene Repo,
+# ein "permissions"-Feld gibt es in Forgejo nicht.
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   release:
