@@ -4,14 +4,13 @@ name: heartbeat
 # Pages-Deploy) nicht nach 60 Tagen ohne Repo-Aktivität deaktiviert.
 # Der Commit landet in Forgejo und wird vom Push-Mirror nach GitHub gespiegelt.
 # "[skip ci]" verhindert, dass der Push auf GitHub den Pages-Workflow auslöst.
+# Der automatische Forgejo-Token hat Schreibrechte auf das eigene Repo,
+# ein "permissions"-Feld gibt es in Forgejo nicht.
 
 on:
   schedule:
     - cron: '23 3 1 * *'   # am 1. jedes Monats um 03:23 UTC
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   beat:
