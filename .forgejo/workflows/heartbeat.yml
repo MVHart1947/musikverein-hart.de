@@ -1,0 +1,29 @@
+name: heartbeat
+
+# Monatlicher Commit, damit GitHub die geplanten Workflows (nächtlicher
+# Pages-Deploy) nicht nach 60 Tagen ohne Repo-Aktivität deaktiviert.
+# Der Commit landet in Forgejo und wird vom Push-Mirror nach GitHub gespiegelt.
+# "[skip ci]" verhindert, dass der Push auf GitHub den Release-Workflow auslöst.
+
+on:
+  schedule:
+    - cron: '23 3 1 * *'   # am 1. jedes Monats um 03:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  beat:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Heartbeat-Commit erzeugen und pushen
+        run: |
+          date -u +%FT%TZ > .heartbeat
+          git config user.name "heartbeat"
+          git config user.email "heartbeat@makeitsystems.de"
+          git add .heartbeat
+          git commit -m "chore: monthly heartbeat [skip ci]"
+          git push origin HEAD:main
