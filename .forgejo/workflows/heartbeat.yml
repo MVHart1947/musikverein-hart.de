@@ -3,7 +3,7 @@ name: heartbeat
 # Monatlicher Commit, damit GitHub die geplanten Workflows (nächtlicher
 # Pages-Deploy) nicht nach 60 Tagen ohne Repo-Aktivität deaktiviert.
 # Der Commit landet in Forgejo und wird vom Push-Mirror nach GitHub gespiegelt.
-# "[skip ci]" verhindert, dass der Push auf GitHub den Release-Workflow auslöst.
+# "[skip ci]" verhindert, dass der Push auf GitHub den Pages-Workflow auslöst.
 
 on:
   schedule:
@@ -16,6 +16,10 @@ permissions:
 jobs:
   beat:
     runs-on: docker
+    # Das Runner-Label "docker" nutzt docker:cli (ohne Node und Git),
+    # actions/checkout braucht aber beides.
+    container:
+      image: node:22-bookworm
     steps:
       - uses: actions/checkout@v4
 
