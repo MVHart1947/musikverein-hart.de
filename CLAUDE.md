@@ -61,8 +61,11 @@ Bootstrap und Font Awesome kommen als Ruby-Gems. `_sass/` importiert deren Sass-
 ## CI und Release
 
 - **`.github/workflows/pages.yml`**: bei Push auf `main`, täglich um 05:00 UTC (für neue Termine ohne Code-Änderung) und von Hand. Holt die Termine, baut mit Jekyll und veröffentlicht auf GitHub Pages.
-- **`.github/workflows/release.yml`**: bei jedem Push auf `main` Tag und Release im Schema `YYYY.MM.N`. Die Release-Notes entstehen aus dem Commit-Log seit dem letzten Tag, nicht über `gh release create --generate-notes`, das nur gemergte PRs auflistet.
+- **`.forgejo/workflows/release.yml`**: bei jedem Push auf `main` (außer Commits mit `[skip ci]`) Tag und Forgejo-Release im Schema `YYYY.MM.N`. Die Release-Notes entstehen aus dem Commit-Log seit dem letzten Tag.
+- **`.forgejo/workflows/heartbeat.yml`**: monatlicher Commit nach `main`, siehe Abweichungen.
+
+Forgejo spiegelt das Repo per Push-Mirror nach GitHub, dort laufen nur noch die Pages-Workflows.
 
 ## Abweichungen von den Konventionen
 
-Keine.
+- Der Workflow `heartbeat` committet am 1. jedes Monats direkt nach `main` (Commit mit `[skip ci]`, löst kein Release aus). Sonst schaltet GitHub die geplanten Pages-Deploys nach 60 Tagen ohne Aktivität ab. `main` läuft dadurch vor `develop`. Das ist unkritisch, weil `develop` die Datei `.heartbeat` nie ändert, ein Merge von `develop` nach `main` bleibt also konfliktfrei.
