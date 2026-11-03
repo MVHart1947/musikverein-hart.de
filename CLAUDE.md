@@ -15,9 +15,15 @@ bundle exec jekyll serve                         # lokaler Server unter http://1
 bundle exec jekyll serve --livereload            # dasselbe mit Live-Reload, nicht bei Änderungen an _config.yml
 bundle exec jekyll build                         # Build nach ./_site
 JEKYLL_ENV=production bundle exec jekyll build   # Build wie in der CI
+bundle exec rake                                 # Testsuite (minitest, test/)
 ```
 
-Keine Linter für JS/CSS, kein `package.json`, keine Tests. Prüfen durch Bauen und Ansehen der Ausgabe in `_site` oder im lokalen Server.
+Keine Linter für JS/CSS, kein `package.json`. Die Tests laden `script/fetch_termine.rb` per `require_relative` (der
+Hauptteil läuft nur beim direkten Aufruf) und bauen die Seite über `SiteBuild.build` in `test/test_helper.rb` mit
+der Jekyll-API in temporäre Ordner. Dabei lassen sich Daten (`termine`, `flyer`) und `site.time` ersetzen, so
+hängen die Tests weder von der Konzertmeister-API noch vom aktuellen Inhalt von `_data/termine.yml` ab. Bekannte
+Fehler stehen als `skip` mit Issue-Nummer in den Tests und werden mit der Behebung wieder aktiviert. Neue Daten-
+dateien, Includes oder Felder brauchen einen Test in `test/data_test.rb` oder `test/site_test.rb`.
 
 ### Termine aus Konzertmeister lokal holen
 
@@ -56,10 +62,11 @@ Ein einziges Layout (`_layouts/default.html`) umschließt jede Seite: `head.html
 
 Bootstrap und Font Awesome kommen als Ruby-Gems. `_sass/` importiert deren Sass-Quellen über `sass.load_paths`, registriert in `_plugins/bootstrap_sass_paths.rb` und `_plugins/font_awesome_sass_paths.rb`. Es gibt kein `node_modules`, kein CDN und keine eingecheckten Icon-Dateien. Das Font-Awesome-Plugin kopiert nach jedem Build die Schriftdateien des Gems nach `_site/assets/fonts/` (Hook `post_write`), weil Jekyll nur ausliefert, was in der Ausgabe liegt. Eigene Anpassungen stehen in `_sass/vars.scss` (Variablen für Bootstrap und Font Awesome, müssen vor dem jeweiligen `@import` geladen werden) und `_sass/base.scss`. Icons: `<i class="fa-solid fa-...">` bzw. `fa-brands fa-...` (Syntax von v6, z. B. im Feld `icon:` von `_data/navigation.yml` oder in `_includes/social.html`).
 
-`exclude:` in `_config.yml` hält `Gemfile`, `script/` und `README.md` aus der gebauten Seite heraus.
+`exclude:` in `_config.yml` hält `Gemfile`, `script/`, `README.md`, `Rakefile` und `test/` aus der gebauten Seite heraus. `test/site_test.rb` prüft das.
 
 ## CI und Release
 
+- **`.forgejo/workflows/test.yml`**: bei jedem Pull Request und jedem Push auf `develop` die Testsuite (`bundle exec rake`) in `ruby:3.4.7-bookworm`.
 - **`.github/workflows/pages.yml`**: bei Push auf `main`, täglich um 05:00 UTC (für neue Termine ohne Code-Änderung) und von Hand. Holt die Termine, baut mit Jekyll und veröffentlicht auf GitHub Pages.
 - **`.forgejo/workflows/release.yml`**: bei jedem Push auf `main` (außer Commits mit `[skip ci]`) Tag und Forgejo-Release im Schema `YYYY.MM.N`. Die Release-Notes entstehen aus dem Commit-Log seit dem letzten Tag.
 - **`.forgejo/workflows/heartbeat.yml`**: monatlicher Commit nach `main`, siehe Abweichungen.
