@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Tests for the built site: links, images and scripts (html-proofer), files that must
+# Tests for the built site: links, images with alt texts and scripts (html-proofer), files that must
 # not be published, the appointment card, the flyer and the pages built from _data/.
 # The site is built with appointments from test/fixtures and a flyer period around the
 # build time, and a second time without appointments and outside the flyer period.
@@ -26,11 +26,10 @@ class SiteTest < Minitest::Test
 
   # Runs html-proofer on the built site and returns its findings instead of exiting.
   #
-  # @param options [Hash] further html-proofer options
   # @return [Array<String>] one line per failure
-  def proofer_failures(**options)
+  def proofer_failures
     proofer = HTMLProofer.check_directory(site, disable_external: true, checks: %w[Links Images Scripts],
-                                                log_level: :fatal, **options)
+                                                log_level: :fatal)
     begin
       proofer.run
     rescue SystemExit
@@ -40,12 +39,6 @@ class SiteTest < Minitest::Test
   end
 
   def test_links_images_and_scripts_resolve
-    # Missing alt attributes are known, see test_images_have_alt_texts
-    assert_empty proofer_failures(ignore_missing_alt: true)
-  end
-
-  def test_images_have_alt_texts
-    skip "14 Bilder ohne alt-Attribut, Issue #7"
     assert_empty proofer_failures
   end
 
