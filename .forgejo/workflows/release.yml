@@ -1,0 +1,82 @@
+name: Release
+
+# Erstellt bei jedem Push nach main (i.d.R. ein Merge aus develop/release-*)
+# automatisch einen neuen Git-Tag + Forgejo-Release nach dem Schema
+# YYYY.MM.VERSION (z.B. 2026.11.1) – VERSION zählt pro Kalendermonat neu ab 1
+# hoch. Der Tag wird vom Push-Mirror nach GitHub gespiegelt.
+# Commits mit "[skip ci]" (z.B. der monatliche Heartbeat) lösen keinen Release aus.
+# Der automatische Forgejo-Token hat Schreibrechte auf das eigene Repo,
+# ein "permissions"-Feld gibt es in Forgejo nicht.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: docker
+    # Das Runner-Label "docker" nutzt docker:cli (ohne Node, Git, curl).
+    container:
+      image: node:22-bookworm
+    steps:
+      - name: Checkout (inkl. Tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Nächste Versionsnummer ermitteln
+        id: version
+        run: |
+          # Letzten existierenden Tag VOR dem Anlegen des neuen Tags merken,
+          # damit die Release-Notes wissen, ab wo sie den Commit-Log auflisten.
+          PREV_TAG=$(git tag --sort=-creatordate | head -n1)
+          echo "prev_tag=${PREV_TAG}" >> "$GITHUB_OUTPUT"
+
+          YEAR_MONTH=$(date -u +"%Y.%m")
+          LAST=$(git tag -l "${YEAR_MONTH}.*" | sed "s/^${YEAR_MONTH}\.//" | sort -n | tail -1)
+          NEXT=$(( ${LAST:-0} + 1 ))
+          VERSION="${YEAR_MONTH}.${NEXT}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Neue Version: ${VERSION} (vorheriger Tag: ${PREV_TAG:-keiner})"
+
+      - name: Release-Notes aus der Commit-Historie erstellen
+        env:
+          PREV_TAG: ${{ steps.version.outputs.prev_tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+          SERVER: ${{ github.server_url }}
+          REPO: ${{ github.repository }}
+        run: |
+          RANGE="HEAD"
+          if [ -n "$PREV_TAG" ]; then
+            RANGE="${PREV_TAG}..HEAD"
+          fi
+
+          {
+            echo "## Änderungen"
+            echo
+            git log "$RANGE" --no-merges --pretty=format:"* %s"
+            echo
+          } > release-notes.md
+
+          if [ -n "$PREV_TAG" ]; then
+            {
+              echo
+              echo "**Vollständiger Änderungsverlauf**: ${SERVER}/${REPO}/compare/${PREV_TAG}...${VERSION}"
+            } >> release-notes.md
+          fi
+
+      - name: Tag und Release in Forgejo erstellen
+        env:
+          TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          SHA: ${{ github.sha }}
+          SERVER: ${{ github.server_url }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Die Forgejo-API legt den Tag am Commit SHA gleich mit an.
+          node -e 'const fs=require("fs");console.log(JSON.stringify({tag_name:process.env.VERSION,target_commitish:process.env.SHA,name:process.env.VERSION,body:fs.readFileSync("release-notes.md","utf8")}))' > payload.json
+          curl -fsS -X POST "${SERVER}/api/v1/repos/${REPO}/releases" \
+            -H "Authorization: token ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data @payload.json
