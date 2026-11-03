@@ -13,7 +13,8 @@ class SiteTest < Minitest::Test
   FLYER = data("flyer").merge("aktiv" => true, "start" => Date.new(2026, 6, 20), "ende" => Date.new(2026, 7, 10))
 
   # Files of the repository that must never end up on the website
-  INTERNAL_FILES = %w[Gemfile Gemfile.lock README.md Rakefile script test .env .env.example .github .forgejo].freeze
+  INTERNAL_FILES = %w[CLAUDE.md Gemfile Gemfile.lock README.md Rakefile script test .env .env.example .github .forgejo]
+                   .freeze
 
   def site
     SiteBuild.build(time: BUILD_TIME, data: { "termine" => public_termine(appointments), "flyer" => FLYER })
@@ -51,11 +52,6 @@ class SiteTest < Minitest::Test
   def test_repository_files_are_not_published
     published = INTERNAL_FILES.select { |file| File.exist?(File.join(site, file)) }
     assert_empty published
-  end
-
-  def test_claude_md_is_not_published
-    skip "CLAUDE.md wird veröffentlicht, Issue #5"
-    refute File.exist?(File.join(site, "CLAUDE.md"))
   end
 
   def test_every_page_has_a_title
