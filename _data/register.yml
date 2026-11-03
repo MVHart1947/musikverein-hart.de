@@ -1,6 +1,6 @@
 # Metadaten je Register/Instrument (Anzeigename, Foto). Die Mitglieder je
 # Register kommen dynamisch aus _data/mitglieder.yml (Feld "register") –
-# siehe _includes/register-card.html. Reihenfolge = Anzeigereihenfolge auf
+# siehe mitglieder.html. Reihenfolge = Anzeigereihenfolge auf
 # mitglieder.html.
 - instrument: "Dirigent"
   bild: "/assets/media/register/dirigent.jpg"
