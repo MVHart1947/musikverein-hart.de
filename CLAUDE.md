@@ -8,7 +8,18 @@ Jekyll-based static website for Musikverein Hart e.V. (a German brass band assoc
 
 ## Git-Workflow
 
-`main` ist der Produktions-Branch: jeder Push löst Deploy (`pages.yml`) und Auto-Release (`release.yml`) aus. Alle Arbeit passiert auf `develop`, das per Merge-Commit nach `main` übernommen wird. **Niemals direkt auf `main` committen** — vor jeder Änderung prüfen, dass `develop` ausgecheckt ist (`git branch --show-current`), und bei versehentlichen Commits auf `main` diese per Cherry-Pick nach `develop` verschieben und `main` zurücksetzen.
+`main` ist der Produktions-Branch: jeder Push löst Deploy (`pages.yml`) und Auto-Release (`release.yml`) aus. Gearbeitet wird nach Git Flow:
+
+- Git Flow nach Best Practice, Hauptbranch `main` (nur veröffentlichte Stände), Integrationsbranch `develop`. Nie direkt auf `main` oder `develop` committen.
+- Vor jeder Änderung `git branch --show-current` prüfen und den Ausgangsbranch aktualisieren.
+- `feature/<thema>`: neue Funktion oder Änderung an einer vorhandenen, von `develop`, PR nach `develop`.
+- `bugfix/<nr>-<thema>`: Fehler, der bis zum nächsten Release warten kann, von `develop`, PR nach `develop`.
+- `hotfix/<nr>-<thema>`: dringender Fehler im veröffentlichten Stand, von `main`, PR nach `main` und danach zurück nach `develop`.
+- `release/<version>`: Release vorbereiten, von `develop`, PR nach `main` und zurück nach `develop`.
+- `chore/<thema>`, `docs/<thema>`: Pflege ohne Funktionsänderung (Abhängigkeiten, CI, diese Datei, README), von `develop`, PR nach `develop`.
+- `<nr>` ist die Nummer des Forgejo-Issues, die PR-Beschreibung verweist mit `Fixes #<nr>` darauf.
+- Ein Branch pro Thema. Nach dem Merge wird er gelöscht, lokal und im Remote.
+- Releases: `develop` (oder `release/*`) wird per Merge-Commit nach `main` übernommen, das macht der Repo-Inhaber.
 
 ## Commands
 
