@@ -45,3 +45,6 @@ exclude:
   - node_modules
   - README.md
   - script
+  # Testsuite (bundle exec rake), gehört nicht auf die Website
+  - Rakefile
+  - test

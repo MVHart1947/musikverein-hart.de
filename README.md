@@ -29,9 +29,15 @@ Voraussetzung: Ruby >= 3.1 und Bundler.
 bundle install             # Gems installieren
 bundle exec jekyll serve   # Dev-Server mit Live-Rebuild unter http://127.0.0.1:4000
 bundle exec jekyll build   # Statische Seite nach _site/ bauen
+bundle exec rake           # Testsuite
 ```
 
-Es gibt keine Tests oder Linter in diesem Repo.
+Die Tests in `test/` (minitest) prüfen das Konzertmeister-Skript, die Daten in `_data/` und die gebaute Seite:
+Links, Bilder und Skripte über [html-proofer](https://github.com/gjtorikian/html-proofer), die Termin-Karte mit
+Beispielterminen aus `test/fixtures/`, den Flyer-Zeitraum und die Seiten, die aus den Daten entstehen. Sie bauen
+die Seite in einen temporären Ordner und brauchen weder Netz noch API-Schlüssel. Der Workflow
+[`test.yml`](.forgejo/workflows/test.yml) führt sie bei jedem Pull Request und jedem Push auf `develop` aus.
+Einen Linter für JS/CSS gibt es nicht.
 
 ## Struktur
 
@@ -41,6 +47,7 @@ Es gibt keine Tests oder Linter in diesem Repo.
 - `_sass/`, `assets/css/main.scss` – Styling (Bootstrap + eigene Anpassungen)
 - `_config.yml` – Site-Einstellungen inkl. Vereinskontakt (`contact.*`)
 - `script/fetch_termine.rb` – holt die Konzerttermine von der Konzertmeister-API (siehe unten)
+- `test/`, `Rakefile` – Testsuite (`bundle exec rake`)
 
 Mehr Architektur-Details (inkl. einiger nicht offensichtlicher Stolperfallen) stehen in [CLAUDE.md](CLAUDE.md).
 

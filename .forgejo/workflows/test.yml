@@ -1,0 +1,42 @@
+name: test
+
+# Runs the test suite (bundle exec rake, see README) for every pull request and
+# every push to develop: the Konzertmeister script, the data in _data/ and the
+# built site (links, images, scripts, appointments, flyer). The tests need
+# neither the Konzertmeister API nor its key.
+#
+# The source comes as an archive from the API, so the job needs neither Node nor
+# actions/checkout. The full Ruby image brings the build tools for gems with
+# native extensions.
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+
+jobs:
+  test:
+    runs-on: docker
+    timeout-minutes: 20
+    container:
+      # Same Ruby line as .github/workflows/pages.yml
+      image: ruby:3.4.7-bookworm
+    steps:
+      - name: Run the tests
+        env:
+          TOKEN: ${{ forgejo.token }}
+          SHA: ${{ forgejo.sha }}
+          SERVER: ${{ forgejo.server_url }}
+          REPO: ${{ forgejo.repository }}
+        run: |
+          set -eu
+          # The token goes to curl through stdin, so it never shows up in the process list
+          printf 'header = "Authorization: token %s"\n' "${TOKEN}" \
+            | curl --fail --silent --show-error --config - --output source.tar.gz \
+              "${SERVER}/api/v1/repos/${REPO}/archive/${SHA}.tar.gz"
+          mkdir checkout
+          tar -xzf source.tar.gz --strip-components=1 -C checkout
+          cd checkout
+
+          bundle install --jobs 4 --quiet
+          bundle exec rake

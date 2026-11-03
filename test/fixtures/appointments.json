@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Sommerfest",
+    "description": "Mit Bewirtung\nab 17 Uhr",
+    "start": "2026-07-18T15:30:00Z",
+    "end": "2026-07-18T21:00:00Z",
+    "timezoneId": "Europe/Berlin",
+    "timeUndefined": false,
+    "publicsite": true,
+    "location": {
+      "formattedAddress": "Tannwaldstraße 16, 72401 Haigerloch, Deutschland",
+      "latitude": 48.36,
+      "longitude": 8.81
+    }
+  },
+  {
+    "name": "Interne Probe",
+    "start": "2026-07-20T17:00:00Z",
+    "publicsite": false,
+    "location": { "name": "Probelokal" }
+  },
+  {
+    "name": "Adventskonzert",
+    "start": "2026-12-05T18:00:00Z",
+    "timeUndefined": true,
+    "publicsite": true,
+    "location": { "name": "Kirche St. Georg" }
+  }
+]

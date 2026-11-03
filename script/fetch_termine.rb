@@ -141,14 +141,18 @@ def public_termine(appointments)
   appointments.select { |a| a["publicsite"] }.map { |a| to_termin(a) }
 end
 
-api_key = ENV["KONZERTMEISTER_API_KEY"]
+# Läuft nur beim direkten Aufruf. Die Tests (test/fetch_termine_test.rb) laden die
+# Datei, um die Funktionen oben einzeln zu prüfen.
+if File.expand_path($PROGRAM_NAME) == File.expand_path(__FILE__)
+  api_key = ENV["KONZERTMEISTER_API_KEY"]
 
-if api_key.nil? || api_key.empty?
-  warn "KONZERTMEISTER_API_KEY ist nicht gesetzt – _data/termine.yml bleibt unverändert."
-  exit 0
+  if api_key.nil? || api_key.empty?
+    warn "KONZERTMEISTER_API_KEY ist nicht gesetzt – _data/termine.yml bleibt unverändert."
+    exit 0
+  end
+
+  termine = public_termine(fetch_all_appointments(api_key)).sort_by { |t| t["start"] }
+
+  File.write(OUTPUT_PATH, termine.to_yaml)
+  puts "#{termine.length} kommende(r) Termin(e) von der Konzertmeister-API geschrieben."
 end
-
-termine = public_termine(fetch_all_appointments(api_key)).sort_by { |t| t["start"] }
-
-File.write(OUTPUT_PATH, termine.to_yaml)
-puts "#{termine.length} kommende(r) Termin(e) von der Konzertmeister-API geschrieben."
