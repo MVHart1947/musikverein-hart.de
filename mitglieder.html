@@ -10,7 +10,7 @@ header: Unsere aktive Kapelle
 <div class="item" id="{{ gruppe.instrument | slugify }}">
   <div class="card">
     {% include card-header.html titel=gruppe.instrument %}
-    <img src="{{ gruppe.bild }}" class="card-img-top" loading="lazy" decoding="async" width="{{ gruppe.breite }}" height="{{ gruppe.hoehe }}">
+    <img src="{{ gruppe.bild }}" alt="{{ gruppe.instrument }}" class="card-img-top" loading="lazy" decoding="async" width="{{ gruppe.breite }}" height="{{ gruppe.hoehe }}">
     <div class="card-body">
       <ul class="list-group list-group-flush">
         {% assign mitglieder = site.data.mitglieder | where: "register", gruppe.instrument %}
