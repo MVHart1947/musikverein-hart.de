@@ -2,8 +2,8 @@
 # – falls zutreffend – die Ämter (siehe _data/vorstandschaft.yml für die
 # Rollen-IDs). Ein Name/Register/Amt wird nur hier gepflegt:
 #
-# - mitglieder.html (via _includes/register-card.html) gruppiert nach
-#   "register" (Metadaten wie Foto/Größe je Register in _data/register.yml).
+# - mitglieder.html gruppiert nach "register", eine Karte je Register
+#   (Metadaten wie Foto/Größe je Register in _data/register.yml).
 # - vorstandschaft.html, kontakt.html, impressum.html und jugend.html
 #   filtern nach "rollen" (Rollen-Metadaten wie Anzeigetext/E-Mail in
 #   _data/vorstandschaft.yml).

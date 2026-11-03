@@ -1,7 +1,8 @@
-# Abschnitte der Vereinsgeschichte (historie.html), gerendert über
-# _includes/legal-section.html im selben Masonry-Grid wie Datenschutz und
-# Impressum. Reihenfolge = Anzeigereihenfolge auf der Seite. icon =
-# Font-Awesome-Solid-Klasse (siehe _plugins/font_awesome_sass_paths.rb).
+# Abschnitte der Vereinsgeschichte (historie.html). Der erste Eintrag steht
+# über die volle Breite, die übrigen zweispaltig darunter, jeweils mit dem
+# Kopf aus _includes/card-header.html. Reihenfolge = Anzeigereihenfolge auf
+# der Seite. icon = Font-Awesome-Solid-Klasse (siehe
+# _plugins/font_awesome_sass_paths.rb).
 - titel: "Die Vereinsgeschichte"
   icon: "fa-book-open"
   inhalt: |
