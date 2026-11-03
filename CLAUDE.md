@@ -62,7 +62,7 @@ Ein einziges Layout (`_layouts/default.html`) umschließt jede Seite: `head.html
 
 Bootstrap und Font Awesome kommen als Ruby-Gems. `_sass/` importiert deren Sass-Quellen über `sass.load_paths`, registriert in `_plugins/bootstrap_sass_paths.rb` und `_plugins/font_awesome_sass_paths.rb`. Es gibt kein `node_modules`, kein CDN und keine eingecheckten Icon-Dateien. Das Font-Awesome-Plugin kopiert nach jedem Build die Schriftdateien des Gems nach `_site/assets/fonts/` (Hook `post_write`), weil Jekyll nur ausliefert, was in der Ausgabe liegt. Eigene Anpassungen stehen in `_sass/vars.scss` (Variablen für Bootstrap und Font Awesome, müssen vor dem jeweiligen `@import` geladen werden) und `_sass/base.scss`. Icons: `<i class="fa-solid fa-...">` bzw. `fa-brands fa-...` (Syntax von v6, z. B. im Feld `icon:` von `_data/navigation.yml` oder in `_includes/social.html`).
 
-`exclude:` in `_config.yml` hält `Gemfile`, `script/`, `README.md`, `Rakefile` und `test/` aus der gebauten Seite heraus. `test/site_test.rb` prüft das.
+`exclude:` in `_config.yml` hält `Gemfile`, `script/`, `README.md`, `CLAUDE.md`, `Rakefile` und `test/` aus der gebauten Seite heraus. `test/site_test.rb` prüft das.
 
 ## CI und Release
 
