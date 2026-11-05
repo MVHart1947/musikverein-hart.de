@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Allgemeine Regeln (Git Flow, Merge-Art, Sprache, Commits, PRs, Issues, Inline-Doku, Docker-Images)
-stehen im Repo `konventionen` und werden hier nicht wiederholt. Diese Datei beschreibt nur dieses Repo.
+stehen im Repo `engineering-handbook` und werden hier nicht wiederholt. Diese Datei beschreibt nur dieses Repo.
 
 ## Überblick
 
