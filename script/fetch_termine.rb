@@ -19,11 +19,14 @@ require "yaml"
 require "time"
 require "tzinfo"
 
-# Lädt KONZERTMEISTER_API_KEY lokal aus einer .env-Datei (falls vorhanden).
-# Überschreibt keine bereits gesetzte Umgebungsvariable, ist also in CI
-# (Key kommt dort aus einem GitHub-Secret) folgenlos.
+# Lädt KONZERTMEISTER_API_KEY lokal aus .env.local (Secrets) und .env (nur
+# Werte ohne Geheimnis), falls vorhanden. Bei gleichem Namen gewinnt
+# .env.local, weil dotenv die zuerst genannte Datei bevorzugt. Überschreibt
+# keine bereits gesetzte Umgebungsvariable, ist also in CI (Key kommt dort
+# aus einem GitHub-Secret) folgenlos.
 begin
-  require "dotenv/load"
+  require "dotenv"
+  Dotenv.load(".env.local", ".env")
 rescue LoadError
   nil
 end
