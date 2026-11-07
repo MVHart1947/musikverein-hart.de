@@ -69,15 +69,15 @@ Der Workflow ([`.github/workflows/pages.yml`](.github/workflows/pages.yml)) reic
 KONZERTMEISTER_API_KEY="dein-key" bundle exec ruby script/fetch_termine.rb
 ```
 
-...oder dauerhaft in einer lokalen `.env`-Datei hinterlegen (wird von `script/fetch_termine.rb` automatisch geladen, ist per `.gitignore` von Commits ausgeschlossen und landet nie im Repo):
+...oder dauerhaft in einer lokalen `.env.local`-Datei hinterlegen (wird von `script/fetch_termine.rb` automatisch geladen, ist per `.gitignore` von Commits ausgeschlossen und landet nie im Repo). Secrets gehören nur in `.env.local`, nie in `.env`:
 
 ```bash
-cp .env.example .env
-# .env öffnen und KONZERTMEISTER_API_KEY=... eintragen
+cp .env.example .env.local
+# .env.local öffnen und KONZERTMEISTER_API_KEY=... eintragen
 bundle exec ruby script/fetch_termine.rb
 ```
 
-`_data/termine.yml` selbst ist ebenfalls gitignored – lokal mit echten Terminen zum Design-Testen befüllen ist also gefahrlos, die Datei landet nie in einem Commit. Ohne gesetzten Key (weder als Umgebungsvariable noch via `.env`) bleibt eine bereits lokal vorhandene `_data/termine.yml` unverändert bzw. fehlt auf einem frischen Checkout ganz – lokales Entwickeln funktioniert in beiden Fällen, die Karte zeigt dann einfach "keine Termine geplant".
+`_data/termine.yml` selbst ist ebenfalls gitignored – lokal mit echten Terminen zum Design-Testen befüllen ist also gefahrlos, die Datei landet nie in einem Commit. Ohne gesetzten Key (weder als Umgebungsvariable noch via `.env.local`) bleibt eine bereits lokal vorhandene `_data/termine.yml` unverändert bzw. fehlt auf einem frischen Checkout ganz – lokales Entwickeln funktioniert in beiden Fällen, die Karte zeigt dann einfach "keine Termine geplant".
 
 ## Flyer-Werbung (Startseite)
 

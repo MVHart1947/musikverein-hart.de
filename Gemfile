@@ -19,9 +19,9 @@ gem "webrick", "~> 1.8"
 # DST-sicher) in script/fetch_termine.rb
 gem "tzinfo", "~> 2.0"
 
-# Lädt KONZERTMEISTER_API_KEY lokal aus .env (nicht committet), damit er
+# Lädt KONZERTMEISTER_API_KEY lokal aus .env.local (nicht committet), damit er
 # beim lokalen Entwickeln nicht bei jedem Aufruf manuell gesetzt werden muss.
-# In CI ungenutzt, da dort kein .env existiert und das Secret bereits als
+# In CI ungenutzt, da dort kein .env.local existiert und das Secret bereits als
 # echte Umgebungsvariable vorliegt.
 gem "dotenv", "~> 3.1", groups: [:development]
 

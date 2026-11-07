@@ -7,8 +7,11 @@ _site/
 vendor/bundle
 Gemfile.lock
 
-# Lokale Secrets (z.B. KONZERTMEISTER_API_KEY), siehe .env.example
+# Lokale Secrets (z.B. KONZERTMEISTER_API_KEY) nur in .env.local, siehe .env.example.
+# .env bleibt ebenfalls ausgeschlossen, falls dort noch ein alter Key liegt.
 .env
+.env.local
+.env.*.local
 
 # Wird bei jedem Build/CI-Lauf frisch von der Konzertmeister-API geholt
 # (script/fetch_termine.rb) – lokal beliebig befüllbar zum Designen, landet
