@@ -7,10 +7,13 @@
 # Für eine neue Aktion: neues Bild unter assets/media/flyer/ hochladen,
 # bild/breite/hoehe/start/ende hier eintragen. aktiv: false blendet den
 # Flyer unabhängig vom Zeitraum komplett aus.
+#
+# ende ist der erste Tag ohne Flyer (Vergleich gegen 00:00 Uhr): Das
+# Jahreskonzert ist am 28.11., der Flyer verschwindet mit dem Build am 29.11.
 aktiv: true
-bild: "/assets/media/flyer/bh-2026-programm.jpg"
-alt: "Flyer Bachhockete 2026"
-breite: 1610
-hoehe: 2268
-start: 2026-07-14
-ende: 2026-08-05
+bild: "/assets/media/flyer/jahreskonzert-2026.jpg"
+alt: "Flyer Jahreskonzert des Musikvereins Hart e.V. am 28.11.2026 um 20 Uhr in der Eichwaldhalle Hart"
+breite: 1217
+hoehe: 1724
+start: 2026-11-12
+ende: 2026-11-29
