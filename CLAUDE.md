@@ -65,6 +65,19 @@ Bootstrap und Font Awesome kommen als Ruby-Gems. `_sass/` importiert deren Sass-
 
 `exclude:` in `_config.yml` hält `Gemfile`, `script/`, `README.md`, `CLAUDE.md`, `Rakefile` und `test/` aus der gebauten Seite heraus. `test/site_test.rb` prüft das.
 
+## Subagents
+
+Die allgemeinen Subagents kommen aus dem Handbuch und lesen ihre Befehle aus dieser Datei. Dazu kommt unter
+`.claude/agents/` einer, den nur diese Website braucht. Im Container steht er ab dem nächsten Release (Stand
+`main`) bereit.
+
+| Agent | Modell | Aufgabe | Anlass | Ändert |
+|---|---|---|---|---|
+| `musikverein-hart.de-content-editor` | Sonnet | Inhalte über `_data/*.yml` und `assets/media/` ändern, Verweise wie `test/data_test.rb` prüfen | jede inhaltliche Änderung: Mitglieder, Ämter, Register, Flyer, Downloads, Historie, Rechtstexte, Navigation | `_data/`, `assets/media/`, `test/data_test.rb` |
+
+Ruby und Jekyll fehlen im Sitzungs-Container. `test-runner` kann `bundle exec rake` dort nicht ausführen, die
+Suite läuft in der CI.
+
 ## CI und Release
 
 - **`.forgejo/workflows/test.yml`**: bei jedem Pull Request und jedem Push auf `develop` die Testsuite (`bundle exec rake`) in `ruby:3.4.7-bookworm`.
